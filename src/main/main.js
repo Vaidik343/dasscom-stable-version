@@ -136,7 +136,7 @@ ipcMain.handle("pbx-login", async (event, ip, username = "admin", password = "ad
     }
   }
   // Fallback to provided or default credentials
-  return await pbxLogin(ip, username, password);
+  return await pbxLogin(ip, username, password);app.whenReady().then(createWindow);
 });
 ipcMain.handle("pbx-api", async (event, ip, token, endpoint) => pbxApi(ip, token, endpoint));
 
