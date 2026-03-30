@@ -1,5 +1,5 @@
 // src/main/main.js
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const { dialog } = require("electron");
 const exportToExcel = require("../utils/exportToExcel");
 const gotLock = app.requestSingleInstanceLock();
@@ -266,7 +266,12 @@ if (!gotLock) {
 } else {
   app.setName("Dasscom");
   app.setAppUserModelId("com.dasscom.desktop"); // match package.json → build.appId
-  app.whenReady().then(createWindow);
+ // app.whenReady().then(createWindow); //this line will show menu bar like 'file , edit and all..'
+
+  app.whenReady().then( () => {
+    Menu.setApplicationMenu(null);
+    createWindow()
+  })
 }
 
 
