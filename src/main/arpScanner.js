@@ -143,21 +143,31 @@ const { app } = require('electron');
 
 function getNmapPath() {
   const platform = os.platform();
-  const arch = os.arch();
   let binaryName = 'nmap';
 
   if (platform === 'win32') {
     binaryName = 'nmap.exe';
   }
 
-  // First try bundled binary in app dir
-  const binariesDir = path.join(path.dirname(process.execPath), 'binaries');
+  const isDev = process.env.NODE_ENV === "development" || !app.isPackaged;
+  
+  // In development, the binaries are in the project root.
+  // In production (via extraResources), they are in the resources directory.
+  const binariesDir = isDev 
+    ? path.join(app.getAppPath(), 'binaries') 
+    : path.join(process.resourcesPath, 'binaries');
+
   const bundledPath = path.join(binariesDir, platform, binaryName);
+  
+  console.log(`🔍 Checking for Nmap binary at: ${bundledPath}`);
+
   if (fs.existsSync(bundledPath)) {
+    console.log(`✅ Found bundled Nmap at: ${bundledPath}`);
     return bundledPath;
   }
 
   // Fallback to system PATH
+  console.warn(`⚠️ Bundled Nmap not found, falling back to system PATH: ${binaryName}`);
   return binaryName;
 }
 

@@ -103,7 +103,7 @@ export const useDeviceDetails = () => {
         } catch (err) {
           console.warn("PBX API fetch failed:", err.message);
         }
-      } else if (type.includes("AP")) {
+      } else if (type === "ap" || type.includes("ap") || type.includes("wifi")) {
         // WiFi / Access Point
         try {
           info = {};

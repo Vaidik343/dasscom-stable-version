@@ -5,37 +5,31 @@ const fs = require('fs');
 const execAsync = util.promisify(exec);
 
 async function getNmapPath() {
-  // Try bundled NMAP first (for packaged app)
-  const possiblePaths = [
-    // Production path (unpacked from ASAR) - matches build config
-    path.join(path.dirname(process.execPath), 'binaries', 'win32', 'nmap.exe'),
-    path.join(path.dirname(process.execPath), 'binaries', process.platform, process.platform === 'win32' ? 'nmap.exe' : 'nmap'),
-    // Alternative production paths
-    path.join(path.dirname(process.execPath), 'resources', 'app.asar.unpacked', 'binaries', 'win32', 'nmap.exe'),
-    path.join(path.dirname(process.execPath), 'resources', 'app.asar.unpacked', 'binaries', process.platform, process.platform === 'win32' ? 'nmap.exe' : 'nmap'),
-    // Additional paths for different build configurations
-    path.join(path.dirname(process.execPath), 'resources', 'app', 'binaries', 'win32', 'nmap.exe'),
-    path.join(path.dirname(process.execPath), 'resources', 'app', 'binaries', process.platform, process.platform === 'win32' ? 'nmap.exe' : 'nmap'),
-    // Try relative to the main process file
-    path.join(path.dirname(process.execPath), 'resources', 'binaries', 'win32', 'nmap.exe'),
-    path.join(path.dirname(process.execPath), 'resources', 'binaries', process.platform, process.platform === 'win32' ? 'nmap.exe' : 'nmap'),
-    path.join(path.dirname(process.execPath), 'binaries', 'win32', 'nmap.exe'),
-    path.join(path.dirname(process.execPath), 'binaries', process.platform, process.platform === 'win32' ? 'nmap.exe' : 'nmap'),
-    // Project-specific bundled binaries (development)
-    path.join(__dirname, '..', '..', 'binaries', 'win32', 'nmap.exe'),
-    path.join(__dirname, '..', '..', 'binaries', process.platform, process.platform === 'win32' ? 'nmap.exe' : 'nmap')
-  ];
+  const { app } = require('electron');
+  const platform = process.platform;
+  let binaryName = 'nmap';
 
-  for (const nmapPath of possiblePaths) {
-    console.log("🔍 Checking NMAP at:", nmapPath);
-    if (fs.existsSync(nmapPath)) {
-      console.log("✅ Found bundled NMAP at:", nmapPath);
-      return nmapPath;
-    }
+  if (platform === 'win32') {
+    binaryName = 'nmap.exe';
+  }
+
+  const isDev = process.env.NODE_ENV === "development" || !app.isPackaged;
+  
+  const binariesDir = isDev 
+    ? path.join(app.getAppPath(), 'binaries') 
+    : path.join(process.resourcesPath, 'binaries');
+
+  const bundledPath = path.join(binariesDir, platform, binaryName);
+  
+  console.log(`🔍 Checking NMAP at: ${bundledPath}`);
+
+  if (fs.existsSync(bundledPath)) {
+    console.log(`✅ Found bundled NMAP at: ${bundledPath}`);
+    return bundledPath;
   }
 
   // Check system-installed NMAP
-  const systemNmap = process.platform === 'win32' ? 'nmap.exe' : 'nmap';
+  const systemNmap = platform === 'win32' ? 'nmap.exe' : 'nmap';
   console.log("🔍 Checking system NMAP");
   try {
     await execAsync(`"${systemNmap}" --version`, { timeout: 5000 });

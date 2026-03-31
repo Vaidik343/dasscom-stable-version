@@ -128,7 +128,6 @@ export default function DeviceModal() {
         allAccountInformation: "📋",
         temperature: "🌡️",
         // Speaker-specific APIs
-        systemInfo: "💻",
         volumePriority: "🔊",
         provisioning: "⚙️",
         sipSlave1Info: "📞",
