@@ -101,82 +101,84 @@ export default function CredentialsModal({ show, onHide, device, onSave }) {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Set Credentials for {device?.ip}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {message && (
-          <Alert variant={messageType} dismissible onClose={() => setMessage(null)}>
-            {message}
-          </Alert>
-        )}
-
-        <Form>
-          <Form.Group className="mb-3">
-            <Form.Label>Username</Form.Label>
-            <Form.Control
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter username"
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password"
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Confirm Password</Form.Label>
-            <Form.Control
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm password"
-            />
-          </Form.Group>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer style={{backgroundColor:"#ff456"}}>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-        <Button
-          variant="info"
-          onClick={handleTestLogin}
-          disabled={testing || !device?.ip}
-        >
-          {testing ? (
-            <>
-              <Spinner animation="border" size="sm" className="me-2" />
-              Testing...
-            </>
-          ) : (
-            "Test Login"
+    <>
+      <Modal show={show} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Set Credentials for {device?.ip}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {message && (
+            <Alert variant={messageType} dismissible onClose={() => setMessage(null)}>
+              {message}
+            </Alert>
           )}
-        </Button>
-        <Button
-          variant="primary"
-          onClick={handleSave}
-          disabled={loading || !device?.ip}
-        >
-          {loading ? (
-            <>
-              <Spinner animation="border" size="sm" className="me-2" />
-              Saving...
-            </>
-          ) : (
-            "Save Credentials"
-          )}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter username"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter password"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Confirm Password</Form.Label>
+              <Form.Control
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm password"
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer style={{ backgroundColor: "#ff456" }}>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button
+            variant="info"
+            onClick={handleTestLogin}
+            disabled={testing || !device?.ip}
+          >
+            {testing ? (
+              <>
+                <Spinner animation="border" size="sm" className="me-2" />
+                Testing...
+              </>
+            ) : (
+              "Test Login"
+            )}
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleSave}
+            disabled={loading || !device?.ip}
+          >
+            {loading ? (
+              <>
+                <Spinner animation="border" size="sm" className="me-2" />
+                Saving...
+              </>
+            ) : (
+              "Save Credentials"
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 }

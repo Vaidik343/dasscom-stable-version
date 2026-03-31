@@ -43,7 +43,7 @@ function createWindow() {
     width: 1500,
     height: 650,
     icon: iconPath,
-  webPreferences: {
+    webPreferences: {
       contextIsolation: true,
       preload: path.join(app.getAppPath(), "src", "preload", "preload.js"),
       webSecurity: false, // ✅ allow loading local files inside ASAR
@@ -74,12 +74,12 @@ function createWindow() {
   console.log = (...args) => {
     originalLog(...args);
     try {
-      win.webContents.send( 
+      win.webContents.send(
         "console-log",
         args.map(a => (typeof a === "object" ? JSON.stringify(a) : String(a))).join(" ")
       );
-    } catch (e) {}
-  }; 
+    } catch (e) { }
+  };
   console.error = (...args) => {
     originalError(...args);
     try {
@@ -87,7 +87,7 @@ function createWindow() {
         "console-log",
         "ERROR: " + args.map(a => (typeof a === "object" ? JSON.stringify(a) : String(a))).join(" ")
       );
-    } catch (e) {}
+    } catch (e) { }
   };
 }
 
@@ -136,7 +136,7 @@ ipcMain.handle("pbx-login", async (event, ip, username = "admin", password = "ad
     }
   }
   // Fallback to provided or default credentials
-  return await pbxLogin(ip, username, password);app.whenReady().then(createWindow);
+  return await pbxLogin(ip, username, password); app.whenReady().then(createWindow);
 });
 ipcMain.handle("pbx-api", async (event, ip, token, endpoint) => pbxApi(ip, token, endpoint));
 
@@ -155,23 +155,23 @@ ipcMain.handle("wifi-login", async (event, ip, username = "admin", password = "a
 ipcMain.handle("wifi-api", async (event, ip, cookie, endpoint, funname, action, body) => wifiApi(ip, cookie, endpoint, funname, action, body));
 
 // WiFi Wireless endpoints
-ipcMain.handle("fetch-wifi-wireless-info",         async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/wireless", 2, 1));
-ipcMain.handle("fetch-wifi-timeout-info",           async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/wireless", 2, 2));
-ipcMain.handle("fetch-wifi-user-list",              async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/wireless", 2, 3));
-ipcMain.handle("fetch-wifi-wireless-params",        async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/wireless", 2, 4));
+ipcMain.handle("fetch-wifi-wireless-info", async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/wireless", 2, 1));
+ipcMain.handle("fetch-wifi-timeout-info", async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/wireless", 2, 2));
+ipcMain.handle("fetch-wifi-user-list", async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/wireless", 2, 3));
+ipcMain.handle("fetch-wifi-wireless-params", async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/wireless", 2, 4));
 
 // WiFi System Log endpoints
-ipcMain.handle("fetch-wifi-system-log-info",        async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/sys_log", 11, 1));
-ipcMain.handle("fetch-wifi-system-log-files",       async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/sys_log", 11, 2));
+ipcMain.handle("fetch-wifi-system-log-info", async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/sys_log", 11, 1));
+ipcMain.handle("fetch-wifi-system-log-files", async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/sys_log", 11, 2));
 
 // WiFi Config & Settings endpoints
-ipcMain.handle("fetch-wifi-config-management",     async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/sys_dev", 12, 1));
-ipcMain.handle("fetch-wifi-language-settings",     async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/sys_dev", 12, 2));
-ipcMain.handle("fetch-wifi-scheduled-restart",     async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/sys_dev", 12, 3));
+ipcMain.handle("fetch-wifi-config-management", async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/sys_dev", 12, 1));
+ipcMain.handle("fetch-wifi-language-settings", async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/sys_dev", 12, 2));
+ipcMain.handle("fetch-wifi-scheduled-restart", async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/sys_dev", 12, 3));
 
 // WiFi Device Info endpoints
-ipcMain.handle("fetch-wifi-device-system-info",    async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/sys_dev", 10, 1));
-ipcMain.handle("fetch-wifi-device-basic-info",     async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/sys_dev", 10, 2));
+ipcMain.handle("fetch-wifi-device-system-info", async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/sys_dev", 10, 1));
+ipcMain.handle("fetch-wifi-device-basic-info", async (event, ip, cookie) => wifiApi(ip, cookie, "/cgi-bin/sys_dev", 10, 2));
 
 // IP Phone API handlers using unified ipPhoneApi function
 ipcMain.handle("fetch-system-info", async (event, ip, token) => ipPhoneApi(ip, '/cgi-bin/infos.cgi?oper=query&param=version'));
@@ -257,7 +257,7 @@ ipcMain.handle("nmap-scan", async (event, ip) => {
     return null;
   }
 });
-app.whenReady().then(createWindow);
+
 
 
 
@@ -266,9 +266,9 @@ if (!gotLock) {
 } else {
   app.setName("Dasscom");
   app.setAppUserModelId("com.dasscom.desktop"); // match package.json → build.appId
- // app.whenReady().then(createWindow); //this line will show menu bar like 'file , edit and all..'
+  // app.whenReady().then(createWindow); //this line will show menu bar like 'file , edit and all..'
 
-  app.whenReady().then( () => {
+  app.whenReady().then(() => {
     Menu.setApplicationMenu(null);
     createWindow()
   })

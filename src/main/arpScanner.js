@@ -62,7 +62,7 @@ function getLocalNetworkSubnets() {
     }
   }
   if (subnets.length === 0) {
-    throw new Error('No suitable network interfaces found');
+    throw new Error('No suitable network interfaces found. Please make sure you are connected to a local network (Wi-Fi or Ethernet cable).');
   }
   return subnets;
 }

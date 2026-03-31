@@ -65,7 +65,7 @@ export default function DeviceList() {
         />
       )}
 
-      {/* Context Menu */}
+      {/* Context Menu 
       {contextMenu && (
         <Dropdown.Menu
           show
@@ -81,8 +81,9 @@ export default function DeviceList() {
           </Dropdown.Item>
         </Dropdown.Menu>
       )}
+      */}
 
-      {/* Click outside to close context menu */}
+      {/* Click outside to close context menu 
       {contextMenu && (
         <div
           style={{
@@ -96,13 +97,16 @@ export default function DeviceList() {
           onClick={handleCloseContextMenu}
         />
       )}
+      */}
 
+      {/* 
       <CredentialsModal
         show={showCredentialsModal}
         onHide={() => setShowCredentialsModal(false)}
         device={selectedDevice}
         onSave={handleCredentialsSaved}
       />
+      */}
     </>
   );
 }
