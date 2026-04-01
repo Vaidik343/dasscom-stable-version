@@ -26,7 +26,9 @@
     "uninstall": "^0.0.0"
   },
   "keywords": [],
-  "author": "",
+  "description": "Network Management Tool.",
+  "author": "Dasscom Technologies",
+  "homepage": "https://dasscom.com",
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.36.0",
@@ -45,7 +47,9 @@
     "wait-on": "^9.0.1"
   },
   "build": {
+    "appId": "com.dasscom.tool",
     "productName": "Dasscom",
+    "copyright": "Copyright © 2026 Dasscom Technologies",
     "files": [
       "dist/**",
       "src/**",
