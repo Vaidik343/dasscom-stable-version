@@ -2,8 +2,11 @@
 const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const { dialog } = require("electron");
 const exportToExcel = require("../utils/exportToExcel");
-const gotLock = app.requestSingleInstanceLock();
 
+app.setAppUserModelId("com.dasscom.networktool");
+app.setName("Dasscom");
+
+const gotLock = app.requestSingleInstanceLock();
 
 const path = require("path");
 const {
@@ -36,8 +39,8 @@ const isDev = process.env.NODE_ENV === "development";
 function createWindow() {
   // Set icon path for both dev and production
   const iconPath = isDev
-    ? path.join(app.getAppPath(), "public/wifi.ico")
-    : path.join(process.resourcesPath, "wifi.ico");
+    ? path.join(app.getAppPath(), "build/icons/icon.ico")
+    : path.join(process.resourcesPath, "icon.ico");
 
   const win = new BrowserWindow({
     width: 1500,
@@ -264,8 +267,8 @@ ipcMain.handle("nmap-scan", async (event, ip) => {
 if (!gotLock) {
   app.quit();
 } else {
-  app.setName("Dasscom");
-  app.setAppUserModelId("com.dasscom.desktop"); // match package.json → build.appId
+  // app.setName("Dasscom");
+  // app.setAppUserModelId("com.dasscom.desktop"); // match package.json → build.appId
   // app.whenReady().then(createWindow); //this line will show menu bar like 'file , edit and all..'
 
   app.whenReady().then(() => {
