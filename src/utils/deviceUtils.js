@@ -172,7 +172,7 @@ export async function enrichDevice(device) {
   return {
     ...device,
     mac,
-    vendor,
+    vendor: "Dasscom",
     type,
     online,
   };

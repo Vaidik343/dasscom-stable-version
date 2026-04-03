@@ -224,13 +224,13 @@ export default function DeviceModal() {
                       <div className="col-md-6">
                         <p><strong>Status:</strong> <span className={`badge ${device.online ? "bg-success" : "bg-danger"}`}>{device.online ? "Online" : "Offline"}</span></p>
                         <p><strong>Hostname:</strong> {device.hostname || "Unknown"}</p>
-                        <p><strong>Vendor:</strong> {device.vendor || "Unknown"}</p>
+                        <p><strong>Vendor:</strong> Dasscom</p>
                       </div>
                       <div className="col-md-6">
                         <p><strong>Type:</strong> {device.type || "Unknown"}</p>
                         <p><strong>MAC Address:</strong> {device.mac || "Unknown"}</p>
-                        <p><strong>Response Time:</strong> {device.responseTime || "Unknown"} ms</p>
-                        <p><strong>Open Ports:</strong> {device.openPorts?.join(", ") || "None"}</p>
+                        {/* <p><strong>Response Time:</strong> {device.responseTime || "Unknown"} ms</p> */}
+                        {/* <p><strong>Open Ports:</strong> {device.openPorts?.join(", ") || "None"}</p> */}
                       </div>
                     </div>
                   </div>

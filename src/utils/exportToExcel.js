@@ -9,24 +9,24 @@ module.exports = async function exportToExcel(devices, filePath) {
   sheet.columns = [
     { header: "IP Address", key: "ip", width: 20 },
     { header: "MAC Address", key: "mac", width: 20 },
-    { header: "Hostname", key: "hostname", width: 25 },
+    // { header: "Hostname", key: "hostname", width: 25 },
     { header: "Status", key: "status", width: 15 },
     { header: "Vendor", key: "vendor", width: 20 },
     { header: "Type", key: "type", width: 15 },
-    { header: "Open Ports", key: "openPorts", width: 20 },
-    { header: "Response Time", key: "responseTime", width: 20 }
+    // { header: "Open Ports", key: "openPorts", width: 20 },
+    // { header: "Response Time", key: "responseTime", width: 20 }
   ];
 
   devices.forEach((device) => {
     sheet.addRow({
       ip: device.ip || "—",
       mac: device.mac || "—",
-      hostname: device.hostname || "—",
+      // hostname: device.hostname || "—",
       status: device.status || "—",
-      vendor: device.vendor || "—",
+      vendor: "Dasscom",
       type: device.type || "—",
-      openPorts: device.openPorts || "—",
-      responseTime: device.responseTime || "—"
+      // openPorts: device.openPorts || "—",
+      // responseTime: device.responseTime || "—"
     });
   });
 
