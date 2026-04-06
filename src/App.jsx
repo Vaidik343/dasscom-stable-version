@@ -20,7 +20,7 @@ export default function App() {
           style={{ background: "#ffffff", width: "100%", zIndex: 1000 }}
         >
           <p className="text-secondary mb-0">
-            © 2026 Dasscom | <a href="https://www.dasscom.com" target="_blank" rel="noopener noreferrer" style={{ color: "#1a73e8", textDecoration: "none" }}>www.dasscom.com</a>
+            Copyright ©2026 . All Rights Reserved | <a href="https://www.dasscom.com" target="_blank" rel="noopener noreferrer" style={{ color: "#1a73e8", textDecoration: "none" }}>www.dasscom.com</a>
           </p>
         </footer>
       </div>
