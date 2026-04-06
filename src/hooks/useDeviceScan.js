@@ -3,8 +3,7 @@ import { useDeviceContext } from "../renderer/context/DeviceContext";
 import { enrichDevice, detectDeviceTypeDynamic } from "../utils/deviceUtils";
 
 export const useDeviceScan = () => {
-  const { setDevices , setLoading } = useDeviceContext();
-  // const [loading, setLoading] = useState(false);
+  const { setDevices , setLoading, loading } = useDeviceContext();
   const [error, setError] = useState(null);
 
   const scanDevices = useCallback(async (options = {}) => {
@@ -42,7 +41,7 @@ export const useDeviceScan = () => {
     } finally {
       setLoading(false);
     }
-  }, [setDevices]);
+  }, [setDevices, setLoading]);
 
-  return { scanDevices, error };
+  return { scanDevices, error, loading };
 };

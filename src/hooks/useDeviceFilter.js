@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useDeviceContext } from "../renderer/context/DeviceContext";
 
 export const useDeviceFilter = () => {
-  const { devices, searchQuery, deviceType } = useDeviceContext();
+  const { devices, searchQuery, deviceType, showOffline } = useDeviceContext();
 
   const filtered = useMemo(() => {
     const q = (searchQuery || "").trim().toLowerCase();
@@ -12,9 +12,10 @@ export const useDeviceFilter = () => {
         (d.mac && d.mac.toLowerCase().includes(q)) ||
         (d.hostname && d.hostname.toLowerCase().includes(q));
       const matchesType = !deviceType || (d.type || "unknown").toLowerCase() === deviceType.toLowerCase();
-      return matchesSearch && matchesType;
+      const isOnline = d.online === true;
+      return matchesSearch && matchesType && (showOffline || isOnline);
     });
-  }, [devices, searchQuery, deviceType]);
+  }, [devices, searchQuery, deviceType, showOffline]);
 
   return filtered;
 };

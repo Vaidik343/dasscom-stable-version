@@ -22,8 +22,20 @@ a:hover {
   color: #535bf2;
 }
 
+.title-drag-region {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 35px;
+  -webkit-app-region: drag;
+  z-index: 9998;
+}
+
 .app-container{
   padding: 1%;
+  padding-top: 45px; /* Added space for the custom title bar area */
+  padding-bottom: 70px; /* Added space for the fixed footer */
   background-color:#EBF2F6 ;
   height: 100%;
   min-height: 100dvh;

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDeviceScan } from "../../hooks/useDeviceScan";
+import { useDeviceContext } from "../context/DeviceContext";
 
 export default function LogsPanel() {
   const [logs, setLogs] = useState([]);
   const [loadError, setLoadError] = useState(null);
   const [showLogs, setShowLogs] = useState(true);
   const { scanDevices, loading: scanning } = useDeviceScan();
+  const { showOffline, setShowOffline } = useDeviceContext();
 
   useEffect(() => {
     // Override console methods to capture renderer logs
@@ -65,13 +67,22 @@ export default function LogsPanel() {
           {showLogs ? "Hide Logs" : "Show Logs"}
         </button>
         <button onClick={() => setLogs([])}>Clear Logs</button>
-        <button onClick={() => scanDevices({ useNmap: true })} disabled={scanning}>
+        <button onClick={() => {
+          setShowOffline(false);
+          scanDevices({ useNmap: true });
+        }} disabled={scanning}>
           {scanning ? "Scanning..." : "Re-Scan"}
         </button>
-        <button onClick={() => scanDevices({ useNmap: true, debugMode: true })} disabled={scanning}>
+        <button onClick={() => {
+          setShowOffline(true);
+          scanDevices({ useNmap: true, debugMode: true });
+        }} disabled={scanning}>
           {scanning ? "Scanning..." : "Debug Scan (All Devices)"}
         </button>
-        <button onClick={() => scanDevices({ useNmap: false, fallbackToArp: true })} disabled={scanning}>
+        <button onClick={() => {
+          setShowOffline(false);
+          scanDevices({ useNmap: false, fallbackToArp: true });
+        }} disabled={scanning}>
           {scanning ? "Scanning..." : "ARP Scan Only"}
         </button>
       </div>

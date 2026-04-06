@@ -9,7 +9,7 @@ import CredentialsModal from "./CredentialsModal";
 import { Dropdown } from "react-bootstrap";
 
 export default function DeviceList() {
-  const { viewMode } = useDeviceContext();
+  const { viewMode, setIsInitialScan } = useDeviceContext();
   const filteredDevices = useDeviceFilter();
   const { fetchDetails } = useDeviceDetails();
   const { scanDevices } = useDeviceScan();
@@ -18,8 +18,10 @@ export default function DeviceList() {
   const [showCredentialsModal, setShowCredentialsModal] = useState(false);
 
   useEffect(() => {
-    scanDevices({ useNmap: true }).catch(err => console.error("Initial scan failed:", err));
-  }, [scanDevices]);
+    scanDevices({ useNmap: true })
+      .catch(err => console.error("Initial scan failed:", err))
+      .finally(() => setIsInitialScan(false));
+  }, [scanDevices, setIsInitialScan]);
 
   const handleContextMenu = (device, event) => {
     setSelectedDevice(device);

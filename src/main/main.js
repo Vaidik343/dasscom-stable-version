@@ -3,8 +3,8 @@ const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const { dialog } = require("electron");
 const exportToExcel = require("../utils/exportToExcel");
 
-app.setAppUserModelId("com.dasscom.networktool");
-app.setName("Dasscom");
+app.setAppUserModelId("com.dasscom.networktool.v2");
+app.setName("Dasscom Configuration Tool");
 
 const gotLock = app.requestSingleInstanceLock();
 
@@ -39,13 +39,19 @@ const isDev = process.env.NODE_ENV === "development";
 function createWindow() {
   // Set icon path for both dev and production
   const iconPath = isDev
-    ? path.join(app.getAppPath(), "build/icons/icon.ico")
-    : path.join(process.resourcesPath, "icon.ico");
+    ? path.join(app.getAppPath(), "build", "icons", "cropped-black-icon.ico")
+    : path.join(process.resourcesPath, "cropped-black-icon.ico");
 
   const win = new BrowserWindow({
     width: 1500,
     height: 650,
     icon: iconPath,
+    titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: '#EBF2F6',
+      symbolColor: '#1a73e8',
+      height: 35
+    },
     webPreferences: {
       contextIsolation: true,
       preload: path.join(app.getAppPath(), "src", "preload", "preload.js"),

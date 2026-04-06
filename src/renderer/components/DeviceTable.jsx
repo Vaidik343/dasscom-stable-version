@@ -1,5 +1,6 @@
 import React from "react";
 import "../style/DeviceTable.css";
+import webViewArrow from "../../assets/icons/arrow-up-right-from-square-solid-full.svg";
 
 export default function DeviceTable({ devices, onRowClick, onIpClick }) {
   return (
@@ -10,7 +11,8 @@ export default function DeviceTable({ devices, onRowClick, onIpClick }) {
             <th>IP Address</th>
             <th>MAC Address</th>
             <th>Type</th>
-            <th>Status</th>
+            {/* <th>Status</th> */}
+            <th>Web View</th>
           </tr>
         </thead>
         <tbody>
@@ -27,7 +29,7 @@ export default function DeviceTable({ devices, onRowClick, onIpClick }) {
               </td>
               <td>{device.mac || "Unknown"}</td>
               <td>{device.type || "Unknown"}</td>
-              <td>
+              {/* <td>
                 <span
                   style={{
                     color: device.online ? '#28a745' : '#dc3545',
@@ -36,6 +38,21 @@ export default function DeviceTable({ devices, onRowClick, onIpClick }) {
                 >
                   {device.online ? 'Online' : 'Offline'}
                 </span>
+              </td> */}
+              <td
+                className="web-view-cell"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.open(`http://${device.ip}`, "_blank");
+                }}
+                style={{ textAlign: "center", cursor: "pointer" }}
+              >
+                <img
+                  src={webViewArrow}
+                  alt="redirect icon"
+                  style={{ width: 14, height: 14 }}
+                  title="Open Web Interface"
+                />
               </td>
             </tr>
           ))}

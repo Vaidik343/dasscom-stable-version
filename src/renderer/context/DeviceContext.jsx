@@ -11,6 +11,8 @@ export const DeviceProvider = ({ children }) => {
   const [deviceType, setDeviceType] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [isInitialScan, setIsInitialScan] = useState(true);
+  const [showOffline, setShowOffline] = useState(false); // Developer override
 
     // Simulate loading (2–3 sec)
  
@@ -25,7 +27,11 @@ export const DeviceProvider = ({ children }) => {
     searchQuery,
     setSearchQuery,
     deviceType,
-    setDeviceType
+    setDeviceType,
+    isInitialScan,
+    setIsInitialScan,
+    showOffline,
+    setShowOffline
   };
 
   return <DeviceContext.Provider value={value}>{children}</DeviceContext.Provider>;

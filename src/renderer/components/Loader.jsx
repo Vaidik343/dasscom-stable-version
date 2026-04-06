@@ -4,14 +4,13 @@ import loader from '../../assets/Loader.json'
 // import scanning from '../../assets/Scanning.json'
 // import plus_loader from '../../assets/pulse loader.json'
 
-const Loader = () => {
+const Loader = ({ size = 150 }) => {
 
     const styles = {
         container: {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            height: "100vh"
         }
     }
   return (
@@ -19,7 +18,7 @@ const Loader = () => {
         <Lottie 
            animationData={loader}
            loop={true}
-           style={{width: 150, height: 150}}
+           style={{width: size, height: size}}
         
         />
 
