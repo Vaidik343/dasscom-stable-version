@@ -1,6 +1,7 @@
 import React from "react";
 import "../style/DeviceModal.css";
 import noApiData from "../../assets/icons/clipboard2-pulse-fill.svg";
+import Loader from "./Loader";
 
 import { useDeviceContext } from "../context/DeviceContext";
 
@@ -207,13 +208,20 @@ export default function DeviceModal() {
             ></button>
           </div>
           <div className="modal-body overflow-auto" id="deviceModalBody">
-            <div className="row">
-              <div className="col-md-12 mb-3">
-                <h4 className="text-center text-dark">{device.ip}</h4>
-                <hr />
+            {device.isLoading ? (
+              <div className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: "300px" }}>
+                <Loader size={60} />
+                <h5 className="mt-4 text-secondary">Fetching Device API Data...</h5>
+                <p className="text-muted small">This may take a few seconds</p>
               </div>
+            ) : (
+              <div className="row">
+                <div className="col-md-12 mb-3">
+                  <h4 className="text-center text-dark">{device.ip}</h4>
+                  <hr />
+                </div>
 
-              {/* Basic Information */}
+                {/* Basic Information */}
               <div className="col-md-12 mb-4">
                 <div className="card">
                   <div className="card-header text-white">
@@ -270,6 +278,7 @@ export default function DeviceModal() {
                 </div>
               )} */}
             </div>
+            )}
           </div>
         </div>
       </div>

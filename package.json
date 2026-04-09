@@ -49,7 +49,7 @@
     "wait-on": "^9.0.1"
   },
   "build": {
-    "appId": "com.dasscom.networktool.v2",
+    "appId": "com.dasscom.networktool.v3",
     "productName": "Dasscom Configuration Tool",
     "copyright": "Copyright © 2026 Dasscom Innovative Sound",
     "files": [
@@ -69,8 +69,8 @@
         "to": "binaries"
       },
       {
-        "from": "build/icons/cropped-black-icon.ico",
-        "to": "cropped-black-icon.ico"
+        "from": "build/icons/dasscom.ico",
+        "to": "dasscom.ico"
       }
     ],
     "npmRebuild": false,
@@ -78,7 +78,7 @@
       "buildResources": "build"
     },
     "win": {
-      "icon": "build/icons/cropped-black-icon.ico",
+      "icon": "build/icons/dasscom.ico",
       "forceCodeSigning": false,
       "target": [
         {
@@ -92,9 +92,9 @@
     },
     "nsis": {
       "include": "build/installer.nsh",
-      "installerIcon": "build/icons/cropped-black-icon.ico",
-      "uninstallerIcon": "build/icons/cropped-black-icon.ico",
-      "installerHeaderIcon": "build/icons/cropped-black-icon.ico",
+      "installerIcon": "build/icons/dasscom.ico",
+      "uninstallerIcon": "build/icons/dasscom.ico",
+      "installerHeaderIcon": "build/icons/dasscom.ico",
       "uninstallDisplayName": "Dasscom Configuration Tool",
       "oneClick": false,
       "perMachine": true,

@@ -3,7 +3,7 @@ const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const { dialog } = require("electron");
 const exportToExcel = require("../utils/exportToExcel");
 
-app.setAppUserModelId("com.dasscom.networktool.v2");
+app.setAppUserModelId("com.dasscom.networktool.v3");
 app.setName("Dasscom Configuration Tool");
 
 const gotLock = app.requestSingleInstanceLock();
@@ -39,8 +39,8 @@ const isDev = process.env.NODE_ENV === "development";
 function createWindow() {
   // Set icon path for both dev and production
   const iconPath = isDev
-    ? path.join(app.getAppPath(), "build", "icons", "cropped-black-icon.ico")
-    : path.join(process.resourcesPath, "cropped-black-icon.ico");
+    ? path.join(app.getAppPath(), "build", "icons", "dasscom.ico")
+    : path.join(process.resourcesPath, "dasscom.ico");
 
   const win = new BrowserWindow({
     width: 1500,
@@ -235,7 +235,7 @@ ipcMain.handle("export-to-excel", async (event, devices) => {
     // open save dialog
     const { canceled, filePath } = await dialog.showSaveDialog({
       title: "Save Network Scan Report",
-      defaultPath: "network_scan.xlsx",
+      defaultPath: "Dasscom Device List.xlsx",
       filters: [
         { name: "Excel Files", extensions: ["xlsx"] },
         { name: "All Files", extensions: ["*"] },

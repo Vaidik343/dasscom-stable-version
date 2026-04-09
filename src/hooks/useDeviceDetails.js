@@ -11,7 +11,9 @@ export const useDeviceDetails = () => {
   const fetchDetails = async (device) => {
     setLoading(true);
     setError(null);
-
+    
+    // Immediately open the modal in a loading state
+    setSelectedDevice({ ...device, isLoading: true, info: null });
 
     try {
       let info = null;

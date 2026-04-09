@@ -12,7 +12,7 @@ export default function App() {
       <div className="app-container">
         <div className="fixed-header">
           <Controls />
-          <LogsPanel />
+          {/* <LogsPanel /> */}
         </div>
         <DeviceList />
         <DeviceModal />
