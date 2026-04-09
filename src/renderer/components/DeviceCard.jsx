@@ -32,7 +32,7 @@ export default function DeviceCard({ device, onClick, onContextMenu }) {
             width: "12px",
             height: "12px",
             borderRadius: "50%",
-            backgroundColor: device.online ? "#28a745" : "#dc3545",
+            // backgroundColor: device.online ? "#28a745" : "#dc3545",
             border: "2px solid white"
           }}
           title={onlineStatus}
@@ -45,20 +45,20 @@ export default function DeviceCard({ device, onClick, onContextMenu }) {
               e.stopPropagation();
               onClick(device);
             }}
-            style={{ cursor: "pointer" , color:"#0c5460" }}
+            style={{ cursor: "pointer", color: "#0c5460" }}
           >
             <strong>IP:</strong> {device.ip}
           </h6>
 
           <p className="card-text mb-1">
-            <strong style={{  color:"#0c5460" }}>MAC: </strong> {device.mac || "Unknown"}
-                
+            <strong style={{ color: "#0c5460" }}>MAC: </strong> {device.mac || "Unknown"}
+
           </p>
           <p className="card-text mb-1">
-            <strong   style={{  color:"#0c5460" }}>Type:</strong> {device.type || "Unknown"}
-              
+            <strong style={{ color: "#0c5460" }}>Type:</strong> {device.type || "Unknown"}
+
           </p>
-              <hr />
+          <hr />
           <p
             className="mt-3 mb-0"
             style={{
@@ -69,7 +69,14 @@ export default function DeviceCard({ device, onClick, onContextMenu }) {
             }}
             onClick={(e) => {
               e.stopPropagation();
-              window.open(`http://${device.ip}`, "_blank");
+              const isPBX = String(device.type || "").toLowerCase().includes("pbx");
+              const hasHttpsPort = device.openPorts && device.openPorts.includes(443);
+
+              if (isPBX || hasHttpsPort) {
+                window.open(`https://${device.ip}`, "_blank");
+              } else {
+                window.open(`http://${device.ip}`, "_blank");
+              }
             }}
           >
             <strong>Web view:</strong>

@@ -98,17 +98,17 @@ export default function DeviceModal() {
   const renderAdvancedData = (data) => {
     if (!data || Object.keys(data).length === 0) {
       return <p className="text-center">
-         <img
-                      src={noApiData}
-                      alt="redirect icon"
-                      style={{
-                        width: 17,
-                        height: 15,
-                        marginLeft: 5,
-                        verticalAlign: "middle",
-                      }}
-                    />
-        
+        <img
+          src={noApiData}
+          alt="redirect icon"
+          style={{
+            width: 17,
+            height: 15,
+            marginLeft: 5,
+            verticalAlign: "middle",
+          }}
+        />
+
         No API data available</p>;
     }
 
@@ -149,7 +149,7 @@ export default function DeviceModal() {
         trunkInfo: "🌐",
         extensions: "📋",
         extensionInfo: "👤",
-         // WiFi-specific APIs
+        // WiFi-specific APIs
         deviceBasic: "📑",
         deviceSystem: "💻",
         wireless: "📡",
@@ -222,7 +222,7 @@ export default function DeviceModal() {
                   <div className="card-body">
                     <div className="row">
                       <div className="col-md-6">
-                        <p><strong>Status:</strong> <span className={`badge ${device.online ? "bg-success" : "bg-danger"}`}>{device.online ? "Online" : "Offline"}</span></p>
+                        {/* <p><strong>Status:</strong> <span className={`badge ${device.online ? "bg-success" : "bg-danger"}`}>{device.online ? "Online" : "Offline"}</span></p> */}
                         <p><strong>Hostname:</strong> {device.hostname || "Unknown"}</p>
                         <p><strong>Vendor:</strong> Dasscom</p>
                       </div>

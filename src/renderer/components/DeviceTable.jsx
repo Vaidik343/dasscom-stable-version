@@ -43,7 +43,14 @@ export default function DeviceTable({ devices, onRowClick, onIpClick }) {
                 className="web-view-cell"
                 onClick={(e) => {
                   e.stopPropagation();
-                  window.open(`http://${device.ip}`, "_blank");
+                  const isPBX = String(device.type || "").toLowerCase().includes("pbx");
+                  const hasHttpsPort = device.openPorts && device.openPorts.includes(443);
+                  
+                  if (isPBX || hasHttpsPort) {
+                    window.open(`https://${device.ip}`, "_blank");
+                  } else {
+                    window.open(`http://${device.ip}`, "_blank");
+                  }
                 }}
                 style={{ textAlign: "center", cursor: "pointer" }}
               >

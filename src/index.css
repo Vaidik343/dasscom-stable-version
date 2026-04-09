@@ -33,13 +33,24 @@ a:hover {
 }
 
 .app-container{
-  padding: 1%;
-  padding-top: 45px; /* Added space for the custom title bar area */
-  padding-bottom: 70px; /* Added space for the fixed footer */
+  padding: 0;
   background-color:#EBF2F6 ;
-  height: 100%;
-  min-height: 100dvh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
+.fixed-header {
+  flex-shrink: 0;
+  padding-top: 40px !important; /* Space for the title-drag-region */
+}
+
+.scrollable-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 80px !important; /* Space to prevent footer overlap */
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;

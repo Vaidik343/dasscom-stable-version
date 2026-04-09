@@ -10,8 +10,10 @@ export default function App() {
     <DeviceProvider>
       <div className="title-drag-region"></div>
       <div className="app-container">
-        <Controls />
-        {/* <LogsPanel /> */}
+        <div className="fixed-header">
+          <Controls />
+          <LogsPanel />
+        </div>
         <DeviceList />
         <DeviceModal />
         <GlobalLoaderOverlay />

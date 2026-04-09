@@ -47,9 +47,9 @@ export default function DeviceList() {
   };
 
   return (
-    <>
+    <div className="scrollable-content p-3">
       {viewMode === "card" ? (
-        <div className="card-container mt-3 row">
+        <div className="card-container row mx-0">
           {filteredDevices.map(d => (
             <DeviceCard
               key={d.ip}
@@ -66,49 +66,6 @@ export default function DeviceList() {
           onIpClick={fetchDetails}
         />
       )}
-
-      {/* Context Menu 
-      {contextMenu && (
-        <Dropdown.Menu
-          show
-          style={{
-            position: 'fixed',
-            left: contextMenu.x,
-            top: contextMenu.y,
-            zIndex: 1050,
-          }}
-        >
-          <Dropdown.Item onClick={handleSetCredentials}>
-            Set Credentials
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      )}
-      */}
-
-      {/* Click outside to close context menu 
-      {contextMenu && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 1049,
-          }}
-          onClick={handleCloseContextMenu}
-        />
-      )}
-      */}
-
-      {/* 
-      <CredentialsModal
-        show={showCredentialsModal}
-        onHide={() => setShowCredentialsModal(false)}
-        device={selectedDevice}
-        onSave={handleCredentialsSaved}
-      />
-      */}
-    </>
+    </div>
   );
 }

@@ -113,7 +113,7 @@ async function speakerLogin(ip, username, password) {
   console.log(`Attempting speaker login to ${url} with username: ${username}`);
   const res = await fetch(url, {
     method: "POST",
-    headers: { 
+    headers: {
       "Content-Type": "application/json",
       "Accept": "application/json"
     },
@@ -173,8 +173,8 @@ async function speakerApi(ip, token, endpoint, method = "GET", body = null) {
 }
 
 // PBX APIs moved to src/api/pbxClient.js for better organization
- 
- 
+
+
 module.exports = {
   // IP Phone APIs (2 functions like speaker APIs)
   ipPhoneApi,        // Unified function for all IP phone API calls
