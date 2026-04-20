@@ -45,7 +45,18 @@ export default function DeviceTable({ devices, onRowClick, onIpClick }) {
                   e.stopPropagation();
                   const isPBX = String(device.type || "").toLowerCase().includes("pbx");
                   const hasHttpsPort = device.openPorts && device.openPorts.includes(443);
+                  const hasHttpPort = device.openPorts && (device.openPorts.includes(80) || device.openPorts.includes(8080));
                   
+                  // If we know the open ports but none are web ports, warn the user
+                  if (device.openPorts && !hasHttpsPort && !hasHttpPort) {
+                    alert(`Web configuration not detected on ${device.ip}.\n\nThis device may not support a web interface or its ports are closed.`);
+                    return;
+                  }
+                  
+                  if (isPBX) {
+                    alert(`Note: PBX systems have strict security settings that may block this built-in viewer.\n\nIf the screen shows up blank, please open your normal web browser (like Chrome or Edge) and type this address into the top bar:\n\nhttps://${device.ip}`);
+                  }
+
                   if (isPBX || hasHttpsPort) {
                     window.open(`https://${device.ip}`, "_blank");
                   } else {

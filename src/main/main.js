@@ -5,6 +5,7 @@ const exportToExcel = require("../utils/exportToExcel");
 
 app.setAppUserModelId("com.dasscom.networktool.v3");
 app.setName("Dasscom Configuration Tool");
+app.commandLine.appendSwitch('ignore-certificate-errors');
 
 const gotLock = app.requestSingleInstanceLock();
 
