@@ -1,5 +1,5 @@
 // src/main/main.js
-const { app, BrowserWindow, ipcMain, Menu } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu, shell } = require("electron");
 const { dialog } = require("electron");
 const exportToExcel = require("../utils/exportToExcel");
 
@@ -268,9 +268,9 @@ ipcMain.handle("nmap-scan", async (event, ip) => {
   }
 });
 
-
-
-
+ipcMain.handle("open-external", async (event, url) => {
+  await shell.openExternal(url);
+});
 if (!gotLock) {
   app.quit();
 } else {

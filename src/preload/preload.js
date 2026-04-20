@@ -75,6 +75,7 @@ contextBridge.exposeInMainWorld("api", {
 
   nmapScan: (ip) => ipcRenderer.invoke("nmap-scan", ip),
   exportToExcel: (devices) => ipcRenderer.invoke("export-to-excel", devices),
+  openExternal: (url) => ipcRenderer.invoke("open-external", url),
 
   receive: (channel, func) => {
     ipcRenderer.on(channel, (event, ...args) => func(...args));
