@@ -47,6 +47,7 @@ contextBridge.exposeInMainWorld("api", {
   // Utility functions
   enrichDevice: (device, credentials) => ipcRenderer.invoke("enrich-device", device, credentials),
   scanDevices: (options = {}) => ipcRenderer.invoke("scan-devices", options),
+  cancelScan: () => ipcRenderer.invoke("cancel-scan"),
 
   // Legacy IP phone functions (for backward compatibility)
   fetchSystemInfo: (ip, token) => ipcRenderer.invoke("fetch-system-info", ip, token),

@@ -31,7 +31,7 @@ const {
   removeCredentials,
   hasCredentials
 } = require("../utils/credentialsStore");
-const { scanDevices } = require("./arpScanner");
+const { scanDevices, cancelAllScans } = require("./arpScanner");
 const { runNmapScan } = require("./nmapScanner");
 const { enrichDevice } = require("../utils/deviceUtils");
 
@@ -40,8 +40,8 @@ const isDev = process.env.NODE_ENV === "development";
 function createWindow() {
   // Set icon path for both dev and production
   const iconPath = isDev
-    ? path.join(app.getAppPath(), "build", "icons", "dasscom.ico")
-    : path.join(process.resourcesPath, "dasscom.ico");
+    ? path.join(app.getAppPath(), "build", "icons", "Dassom-created-bg-white-test.ico")
+    : path.join(process.resourcesPath, "Dassom-created-bg-white-test.ico");
 
   const win = new BrowserWindow({
     width: 1500,
@@ -228,6 +228,17 @@ ipcMain.handle("scan-devices", async (event, options = {}) => {
   } catch (error) {
     console.error("🚀 IPC: scan error:", error);
     throw error;
+  }
+});
+
+ipcMain.handle("cancel-scan", async () => {
+  console.log("🛑 IPC: cancel-scan called");
+  try {
+    cancelAllScans();
+    return { success: true };
+  } catch (error) {
+    console.error("🛑 IPC: cancel-scan error:", error);
+    return { success: false, error: error.message };
   }
 });
 

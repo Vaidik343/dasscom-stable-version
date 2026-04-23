@@ -43,5 +43,15 @@ export const useDeviceScan = () => {
     }
   }, [setDevices, setLoading]);
 
-  return { scanDevices, error, loading };
+  const cancelScan = useCallback(async () => {
+    try {
+      await window.api.cancelScan();
+    } catch (err) {
+      console.warn("cancelScan error:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [setLoading]);
+
+  return { scanDevices, cancelScan, error, loading };
 };

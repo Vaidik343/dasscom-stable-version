@@ -12,8 +12,48 @@ const path = require("path");
 const fs = require("fs");
 const log = require('electron-log');
 
+// --- Cancellation Logic ---
+let activeProcesses = new Set();
+let isCancelled = false;
+
+/**
+ * Track a child process so we can kill it if the scan is cancelled.
+ */
+function registerProcess(proc) {
+  if (!proc) return;
+  activeProcesses.add(proc);
+  proc.on('exit', () => activeProcesses.delete(proc));
+  proc.on('error', () => activeProcesses.delete(proc));
+}
+
+/**
+ * Immediately terminates all active scanning/pinging processes.
+ */
+function cancelAllScans() {
+  console.log("🛑 IPC: cancelAllScans called. Cleaning up...");
+  isCancelled = true;
+  activeProcesses.forEach(proc => {
+    try {
+      // Use SIGKILL on Windows to ensure immediate termination
+      const platform = os.platform();
+      if (platform === 'win32') {
+        exec(`taskkill /pid ${proc.pid} /f /t`, (err) => {
+          if (err) console.warn(`Failed to taskkill ${proc.pid}:`, err.message);
+        });
+      } else {
+        proc.kill('SIGKILL');
+      }
+    } catch (e) {
+      console.warn("Failed to kill process:", e.message);
+    }
+  });
+  activeProcesses.clear();
+}
+
 // Check if a device is online by pinging it
 async function checkOnlineStatus(ipAddr) {
+  if (isCancelled) return false;
+
   return new Promise((resolve) => {
     const platform = os.platform();
     let pingCmd;
@@ -24,7 +64,12 @@ async function checkOnlineStatus(ipAddr) {
       pingCmd = `ping -c 1 -W 2 ${ipAddr}`;
     }
 
-    exec(pingCmd, (error, stdout, stderr) => {
+    const proc = exec(pingCmd, (error, stdout, stderr) => {
+      if (isCancelled) {
+        resolve(false);
+        return;
+      }
+
       if (error) {
         console.log(`Ping failed for ${ipAddr}: ${error.message}`);
         resolve(false);
@@ -37,6 +82,8 @@ async function checkOnlineStatus(ipAddr) {
         }
       }
     });
+
+    registerProcess(proc);
   });
 }
 
@@ -150,15 +197,15 @@ function getNmapPath() {
   }
 
   const isDev = process.env.NODE_ENV === "development" || !app.isPackaged;
-  
+
   // In development, the binaries are in the project root.
   // In production (via extraResources), they are in the resources directory.
-  const binariesDir = isDev 
-    ? path.join(app.getAppPath(), 'binaries') 
+  const binariesDir = isDev
+    ? path.join(app.getAppPath(), 'binaries')
     : path.join(process.resourcesPath, 'binaries');
 
   const bundledPath = path.join(binariesDir, platform, binaryName);
-  
+
   console.log(`🔍 Checking for Nmap binary at: ${bundledPath}`);
 
   if (fs.existsSync(bundledPath)) {
@@ -237,12 +284,16 @@ async function scanWithNmap(subnet) {
     nmap.on('error', (err) => {
       reject(err);
     });
+
+    registerProcess(nmap);
   });
 }
 
 
 // 🚀 Main scan function
 async function scanDevices({ useSubnetScan = false, ipAddr, netmask, useNmap = true, fallbackToArp = true, debugMode = false } = {}) {
+  isCancelled = false; // Reset cancellation state for new scan
+
   if (useSubnetScan && ipAddr && netmask) {
     return scanSubnet(ipAddr, netmask);
   }
@@ -263,7 +314,7 @@ async function scanDevices({ useSubnetScan = false, ipAddr, netmask, useNmap = t
         console.log('Attempting Nmap scan on all subnets...');
 
         // Scan all subnets with Nmap in parallel to speed up scanning
-        const scanPromises = subnets.map(subnetInfo => 
+        const scanPromises = subnets.map(subnetInfo =>
           scanWithNmap(subnetInfo.subnetCidr)
             .then(subnetDevices => {
               console.log(`Subnet ${subnetInfo.subnetCidr} found ${subnetDevices.length} devices:`, subnetDevices.map(d => `${d.ip}:${d.mac}`).join(', '));
@@ -301,7 +352,7 @@ async function scanDevices({ useSubnetScan = false, ipAddr, netmask, useNmap = t
             resolve();
           });
         });
-        
+
         // Wait a moment for ARP table to refresh
         await new Promise(resolve => setTimeout(resolve, 1000));
       } catch (e) {
@@ -329,12 +380,12 @@ async function scanDevices({ useSubnetScan = false, ipAddr, netmask, useNmap = t
 
     // Combine and deduplicate devices from both methods
     const deviceMap = new Map();
-    
+
     // Add nmap devices first (they have more reliable MAC addresses)
     nmapDevices.forEach(device => {
       deviceMap.set(device.ip, device);
     });
-    
+
     // Add ARP devices, but don't overwrite nmap devices (they're more reliable)
     arpDevices.forEach(device => {
       if (!deviceMap.has(device.ip)) {
@@ -363,31 +414,43 @@ async function scanDevices({ useSubnetScan = false, ipAddr, netmask, useNmap = t
         console.log(`Device ${index + 1}: Original MAC: ${device.mac}, Normalized: ${normalized}, Prefix: ${prefix}, Is Dasscom: ${prefix === '8C:1F:64'}`);
       }
     });
-    
+
     const dasscomDevices = devices.filter(device => device.mac && normalizeMac(device.mac).startsWith('8C:1F:64'));
     console.log(`Filtered to ${dasscomDevices.length} Dasscom devices (MAC prefix 8C:1F:64) out of ${devices.length}`);
+
+    // If cancelled during discovery, stop here
+    if (isCancelled) {
+      console.log("🚫 Scan aborted before enrichment phase.");
+      return [];
+    }
 
     // In debug mode, return all devices for testing
     if (debugMode) {
       console.log('DEBUG MODE: Returning all devices instead of just Dasscom devices');
       const enrichedDevices = await Promise.all(devices.map(async (device) => {
+        if (isCancelled) return null;
         const online = await checkOnlineStatus(device.ip);
         return enrichDevice({ ...device, online });
       }));
-      return enrichedDevices;
+      return enrichedDevices.filter(Boolean);
     }
 
     const enrichedDevices = await Promise.all(dasscomDevices.map(async (device) => {
+      if (isCancelled) return null;
       const online = await checkOnlineStatus(device.ip);
       return enrichDevice({ ...device, online });
     }));
 
-    return enrichedDevices;
+    return enrichedDevices.filter(Boolean);
   } catch (error) {
+    if (isCancelled) {
+      console.log("🚫 Scan process cleaned up after cancellation.");
+      return [];
+    }
     console.error("Error in scanDevices:", error);
     throw error;
   }
 }
 
-module.exports = { scanDevices };
+module.exports = { scanDevices, cancelAllScans };
 
